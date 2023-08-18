@@ -1,0 +1,35 @@
+name: update
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:  
+jobs:
+  pull:
+    name: Pull felixonmars/dnsmasq-china-list
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set variables
+        run: |
+          echo "RELEASE_NAME=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+          echo "CHINA_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV
+          echo "GOOGLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
+          echo "APPLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV
+        shell: bash
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+      - name: Create `accelerated-domains.china`, `google.china` and `apple.china` lists
+        run: |
+          mkdir data
+          curl -sSL "${CHINA_DOMAINS_URL}" | awk -F '/' '{print $2}' > data/accelerated-domains.china
+          curl -sSL "${GOOGLE_DOMAINS_URL}" | awk -F '/' '{print $2}' > data/google.china
+          curl -sSL "${APPLE_DOMAINS_URL}" | awk -F '/' '{print $2}' > data/apple.china
+      - name: Configuration environment
+        run: |
+          git config --global user.email "dummyuser@github.com"
+          git config --global user.name "dummyuser"
+      - name: Git push assets to "main" branch
+        continue-on-error: false
+        run: |
+          git add data/
+          git commit -m "${{ env.RELEASE_NAME }}"
+          git push origin main
