@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Create `accelerated-domains.china`, `google.china` and `apple.china` lists
         run: |
-          mkdir data
+          if [ ! -d "data" ]; then mkdir data; fi
           curl -sSL "${CHINA_DOMAINS_URL}" | awk -F '/' '{print $2}' > data/accelerated-domains.china
           curl -sSL "${GOOGLE_DOMAINS_URL}" | awk -F '/' '{print $2}' > data/google.china
           curl -sSL "${APPLE_DOMAINS_URL}" | awk -F '/' '{print $2}' > data/apple.china
