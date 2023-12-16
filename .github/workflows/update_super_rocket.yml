@@ -48,7 +48,7 @@ jobs:
 
     - name: Generate gfwlist_doamins.conf    
       run: |
-        curl -sSL -k https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt |base64 -d |sed -n '{s/^||\?//g;s/https\?:\/\///g;s/^\.//g;s/\*.*//g;s/\/.*//g;s/%.*//g;/^$/d;/^!.*/d;/^@.*/d;/^\[.*/d;/\.$/d;/^[^\.]*$/d;/^[0-9\.]*$/d;p}' |sort |uniq
+        curl -sSL -k https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt |base64 -d |sed -n '{s/^||\?//g;s/https\?:\/\///g;s/^\.//g;s/\*.*//g;s/\/.*//g;s/%.*//g;/^$/d;/^!.*/d;/^@.*/d;/^\[.*/d;/\.$/d;/^[^\.]*$/d;/^[0-9\.]*$/d;p}' |sort |uniq > gfwlist.txt
         sed -i 's/^/DOMAIN-SUFFIX,/' gfwlist.txt
         sed -i 's/$/,proxy/'  gfwlist.txt
         mv gfwlist.txt gfwlist.conf
