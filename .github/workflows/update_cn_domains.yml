@@ -1,4 +1,4 @@
-name: update cn domains
+name: cn domains
 on:
   schedule:
     - cron: '0 0 * * *'
