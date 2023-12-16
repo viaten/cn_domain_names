@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-  gen:
+  update:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -49,7 +49,7 @@ jobs:
 
     - name: final files
       run: |
-        echo echo "##update date: $(date +%Y%m%d%H%M%S)" >> base.conf
+        echo "##update date: $(date +%Y%m%d%H%M%S)" >> base.conf
         echo "[General]" >> base.conf
         echo "bypass-system = true" >> base.conf
         echo "skip-proxy = 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local" >> base.conf
@@ -64,9 +64,9 @@ jobs:
         cp base.conf blacklist.conf
         echo "FINAL,direct" >> blacklist.conf
         
-        cd data/super_rocket  || mkdir -p data/super_rocket
-        mv ../../whitelist.conf .
-        mv ../../blacklist.conf .
+        cd data/super_rocket  || mkdir -p data/super_rocket 
+        mv whitelist.conf data/super_rocket/
+        mv blacklist.conf data/super_rocket/
 
 
 
